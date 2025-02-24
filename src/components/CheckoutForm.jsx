@@ -28,7 +28,7 @@ const CheckoutForm=()=>{
                     elements,
                     clientSecret:paymentData?.clientSecret,
                     confirmParams:{
-                        return_url: 'https://payment-frontend-ruby.vercel.app/success',
+                        return_url: '/success',
                     }
                 })
             //     setErrorMessage(error?.message)
