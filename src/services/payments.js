@@ -1,16 +1,34 @@
 import axios from "axios"
+import { BASE_URL } from "../utils/urls"
 
-const BASE_URL="http://localhost:5000/stripe"
 
 export const paymentIntentAPI=async()=>{
-    const response=await axios.post(`${BASE_URL}/checkout`
+    const response=await axios.post(`${BASE_URL}/stripe/checkout`
         // ,{
         //     subscriptionPlanId:planId,
 
         // },
-        // {
-        //     withCredentials:true,
-        // }
+        ,{},
+        {
+            withCredentials:true,
+        }
     )
+    console.log(response);
+    
+    return response.data
+}
+
+export const paymentVerifyAPI=async(paymentId)=>{
+    const response=await axios.get(`${BASE_URL}/stripe/verify/${paymentId}`
+        // ,{
+        //     subscriptionPlanId:planId,
+
+        // },
+        ,{
+            withCredentials:true,
+        }
+    )
+    console.log(response);
+    
     return response.data
 }

@@ -2,8 +2,10 @@ import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { useState } from "react";
 import {useMutation} from "@tanstack/react-query"
 import { paymentIntentAPI } from "../services/payments";
+import { BASE_URL } from "../utils/urls";
 
 const CheckoutForm=()=>{
+    
     const paymentMutation=useMutation({
         mutationKey:["checkout"],
         mutationFn:paymentIntentAPI
@@ -14,18 +16,31 @@ const CheckoutForm=()=>{
     const handleSubmit=async(e)=>{
         e.preventDefault()
         try{
-            paymentMutation.mutateAsync().then(async()=>{
+            const { error: submitError } = await elements.submit();
+            if (submitError) {
+                setErrorMessage(submitError.message);
+                return;
+            }
+
+            const paymentData = await paymentMutation.mutateAsync();
+            // paymentMutation.mutateAsync().then(async()=>{
                 const {error}=await stripe.confirmPayment({
-                    clientSecret:paymentMutation.data?.clientSecret,
+                    elements,
+                    clientSecret:paymentData?.clientSecret,
                     confirmParams:{
-                        return_url:'http://localhost:5173/',
+                        return_url: 'https://payment-frontend-ruby.vercel.app/success',
                     }
                 })
-                setErrorMessage(error?.message)
-            }).catch((e)=>console.log(e)
-            )
+            //     setErrorMessage(error?.message)
+            // }).catch((e)=>console.log(e)
+            // )
+            if (error) {
+                setErrorMessage(error.message);
+            }
         }catch(error){
-            setErrorMessage(error?.message)
+            console.log("Stripe Error:", error); 
+            // setErrorMessage(error?.message)
+            setErrorMessage(error?.response?.data?.message || "An error occurred");
         }
     }
     console.log(paymentMutation);

@@ -6,9 +6,9 @@ import GooglePayButton from './components/GooglePayButton';
 
 const stripePromise = loadStripe("pk_test_51QunfA6YpJqH35xzYVi22HppuBM8Fkgqt7IzYwaJrw7uc5hfGGFcm8e75W9RmOqj52Ah90fo1tzi27MElqz19Kmx00K5y5QMtc");
 
-function App() {
+const App=()=>{
   return (
-    <div>hii
+    <div>
     <Elements stripe={stripePromise}>      
       <GooglePayButton />
     </Elements>
