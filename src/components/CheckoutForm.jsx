@@ -97,7 +97,7 @@ const CheckoutForm = () => {
 
     try {
       // ✅ 1. Create Payment Intent from backend
-      const { data } = await axios.post('http://localhost:5000/payment', {
+      const { data } = await axios.post('https://payment-backend-sq6x.onrender.com/payment', {
         amount: 5000, // Amount in cents (e.g., $50.00)
         currency: 'usd',
       });
