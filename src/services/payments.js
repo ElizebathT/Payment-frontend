@@ -18,8 +18,10 @@ export const paymentIntentAPI=async()=>{
     return response.data
 }
 
-export const paymentVerifyAPI=async(paymentId)=>{
-    const response=await axios.get(`${BASE_URL}/stripe/verify/${paymentId}`
+// export const paymentVerifyAPI=async(paymentId)=>{
+//     const response=await axios.get(`${BASE_URL}/stripe/verify/${paymentId}`
+export const paymentVerifyAPI=async()=>{
+    const response=await axios.get(`${BASE_URL}/stripe/verify`
         // ,{
         //     subscriptionPlanId:planId,
 
