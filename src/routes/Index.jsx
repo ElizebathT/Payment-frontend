@@ -10,6 +10,7 @@ const Index = () => {
             <Routes>
                 <Route path="/" element={<CheckoutForm/>}/>
                 <Route path="/success" element={<Success/>}/>
+                <Route path="/test" element="Testing"/>
             </Routes>
         </BrowserRouter> 
         
