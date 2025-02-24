@@ -30,7 +30,7 @@ export const paymentVerifyAPI=async()=>{
             withCredentials:true,
         }
     )
-    console.log(response);
+    console.log('response',response);
     
     return response.data
 }
