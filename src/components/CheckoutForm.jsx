@@ -75,6 +75,7 @@ import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // ✅ Load Stripe with your Public Key
 const stripePromise = loadStripe('pk_test_51QunfA6YpJqH35xzYVi22HppuBM8Fkgqt7IzYwaJrw7uc5hfGGFcm8e75W9RmOqj52Ah90fo1tzi27MElqz19Kmx00K5y5QMtc'); // Replace with your Stripe public key
@@ -113,9 +114,11 @@ const CheckoutForm = () => {
         setError(result.error.message);
         setPaymentSuccess(null);
       } else {
-        if (result.paymentIntent.status === 'succeeded') {
+        if (result.paymentIntent.status === 'succeeded') {             
           setPaymentSuccess('💰 Payment Successful!');
           setError(null);
+          const navigate=useNavigate()
+          navigate('/success')
         }
       }
     } catch (err) {
