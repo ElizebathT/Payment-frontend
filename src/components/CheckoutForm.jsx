@@ -87,7 +87,7 @@ const CheckoutForm = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(null);
   const [error, setError] = useState(null);
-
+  const navigate=useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsProcessing(true);
@@ -116,8 +116,7 @@ const CheckoutForm = () => {
       } else {
         if (result.paymentIntent.status === 'succeeded') {             
           setPaymentSuccess('💰 Payment Successful!');
-          setError(null);
-          const navigate=useNavigate()
+          setError(null);          
           navigate('/success')
         }
       }
