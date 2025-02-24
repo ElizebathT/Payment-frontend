@@ -19,7 +19,7 @@ export const paymentIntentAPI=async()=>{
 }
 
 export const paymentVerifyAPI=async(paymentId)=>{
-    const response=await axios.get(`${BASE_URL}/stripe/webhook`
+    const response=await axios.get(`${BASE_URL}/stripe/verify`
         // ,{
         //     subscriptionPlanId:planId,
 
