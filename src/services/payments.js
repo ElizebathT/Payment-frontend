@@ -3,7 +3,7 @@ import { BASE_URL } from "../utils/urls"
 
 
 export const paymentIntentAPI=async()=>{
-    const response=await axios.post(`${BASE_URL}/stripe/checkout`
+    const response=await axios.post('https://payment-backend-sq6x.onrender.com/stripe/checkout'
         ,{},
         {
             withCredentials:true,
@@ -15,7 +15,7 @@ export const paymentIntentAPI=async()=>{
 }
 
 export const paymentVerifyAPI=async()=>{
-    const response=await axios.post(`${BASE_URL}/stripe/verify`
+    const response=await axios.post('https://payment-backend-sq6x.onrender.com/stripe/verify'
         ,{
             withCredentials:true,
         }
