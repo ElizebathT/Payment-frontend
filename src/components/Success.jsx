@@ -6,13 +6,12 @@ import { useSearchParams } from 'react-router-dom'
 const Success = () => {  
   const {data,isError,isLoading, isSuccess}=useQuery({
     queryKey:["verify-payment"],
-    queryFn:()=>paymentVerifyAPI(paymentIntentId)
+    queryFn:paymentVerifyAPI
   })
   
   return (
     <div>
       <p>Success</p>
-      {data.receipt_url}
     </div>
   )
 }
