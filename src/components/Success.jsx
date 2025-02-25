@@ -12,6 +12,7 @@ const Success = () => {
   return (
     <div>
       <p>Success</p>
+      {data}
     </div>
   )
 }
