@@ -54,18 +54,23 @@ const CheckoutForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-8 border rounded-2xl shadow-2xl bg-gradient-to-br from-white to-gray-100 space-y-6">
-  <h2 className="text-3xl font-extrabold text-center text-blue-700">💳 Stripe Payment</h2>
-  
-  <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg shadow-inner transition-all hover:border-blue-500 focus-within:border-blue-500">
-    <CardElement className="p-2 focus:outline-none" />
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white border border-gray-200 rounded-xl shadow-lg space-y-6">
+  <h2 className="text-3xl font-semibold text-center text-gray-800">Secure Payment</h2>
+
+  <div className="space-y-2">
+    <label className="text-sm font-medium text-gray-700">Card Details</label>
+    <div className="p-3 border border-gray-300 rounded-lg focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+      <CardElement className="p-1 focus:outline-none" />
+    </div>
   </div>
 
   <button
     type="submit"
     disabled={!stripe || isProcessing}
-    className={`mt-4 w-full py-3 rounded-lg text-white font-bold text-lg shadow-md transition-all duration-300 ${
-      isProcessing ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800'
+    className={`w-full py-3 rounded-lg text-white font-semibold text-lg transition-all ${
+      isProcessing
+        ? 'bg-gray-400 cursor-not-allowed'
+        : 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300'
     }`}
   >
     {isProcessing ? (
@@ -81,8 +86,10 @@ const CheckoutForm = () => {
     )}
   </button>
 
-  {error && <p className="text-red-600 text-center font-medium">{error}</p>}
-  {paymentSuccess && <p className="text-green-600 text-center font-medium animate-pulse">{paymentSuccess}</p>}
+  {error && <p className="text-red-600 text-center">{error}</p>}
+  {paymentSuccess && <p className="text-green-600 text-center">{paymentSuccess}</p>}
+
+  <p className="text-xs text-gray-500 text-center">🔒 Your payment is encrypted and secure.</p>
 </form>
 
   );
