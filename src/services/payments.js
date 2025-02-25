@@ -15,7 +15,7 @@ export const paymentIntentAPI=async()=>{
 }
 
 export const paymentVerifyAPI=async()=>{
-    const response=await axios.post('https://payment-backend-sq6x.onrender.com/stripe/verify'
+    const response=await axios.post('https://payment-backend-sq6x.onrender.com/stripe/webhook'
         ,{},{
             withCredentials:true,
         }
