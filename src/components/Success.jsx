@@ -4,15 +4,15 @@ import { paymentVerifyAPI } from '../services/payments'
 import { useSearchParams } from 'react-router-dom'
 
 const Success = () => {  
-  const {data,isError,isLoading, isSuccess}=useQuery({
-    queryKey:["verify-payment"],
-    queryFn:paymentVerifyAPI
-  })
+  // const {data,isError,isLoading, isSuccess}=useQuery({
+  //   queryKey:["verify-payment"],
+  //   queryFn:paymentVerifyAPI
+  // })
   
   return (
     <div>
       <p>Success</p>
-      {data}
+      {/* {data} */}
     </div>
   )
 }
