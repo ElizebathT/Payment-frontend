@@ -1,59 +1,59 @@
-// import React, { useState } from 'react';
-// import { loadStripe } from '@stripe/stripe-js';
-// import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
-// import { BASE_URL } from '../utils/urls';
+import React, { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/urls';
 
-// // ✅ Load Stripe with your Public Key
-// const stripePromise = loadStripe('pk_test_51QunfA6YpJqH35xzYVi22HppuBM8Fkgqt7IzYwaJrw7uc5hfGGFcm8e75W9RmOqj52Ah90fo1tzi27MElqz19Kmx00K5y5QMtc'); // Replace with your Stripe public key
+// ✅ Load Stripe with your Public Key
+const stripePromise = loadStripe('pk_test_51QunfA6YpJqH35xzYVi22HppuBM8Fkgqt7IzYwaJrw7uc5hfGGFcm8e75W9RmOqj52Ah90fo1tzi27MElqz19Kmx00K5y5QMtc'); // Replace with your Stripe public key
 
-// // ✅ Main Payment Component
-// const CheckoutForm = () => {
-//   const stripe = useStripe();
-//   const elements = useElements();
-//   const [isProcessing, setIsProcessing] = useState(false);
-//   const [paymentSuccess, setPaymentSuccess] = useState(null);
-//   const [error, setError] = useState(null);
-//   const navigate=useNavigate()
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setIsProcessing(true);
+// ✅ Main Payment Component
+const CheckoutForm = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(null);
+  const [error, setError] = useState(null);
+  const navigate=useNavigate()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsProcessing(true);
 
-//     if (!stripe || !elements) {
-//       return;
-//     }
+    if (!stripe || !elements) {
+      return;
+    }
 
-//     try {
-//       // ✅ 1. Create Payment Intent from backend
-//       const { data } = await axios.post('https://payment-backend-sq6x.onrender.com/stripe/checkout', {}, { headers: { 'Content-Type': 'application/json' },withCredentials: true });
+    try {
+      // ✅ 1. Create Payment Intent from backend
+      const { data } = await axios.post('https://payment-backend-sq6x.onrender.com/stripe/checkout', {}, { headers: { 'Content-Type': 'application/json' },withCredentials: true });
 
-//       // ✅ 2. Confirm Card Payment
-//       const result = await stripe.confirmCardPayment(data.clientSecret, {
-//         payment_method: {
-//           card: elements.getElement(CardElement),
-//         },
-//       });
+      // ✅ 2. Confirm Card Payment
+      const result = await stripe.confirmCardPayment(data.clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      });
 
-//       if (result.error) {
-//         setError(result.error.message);
-//         setPaymentSuccess(null);
-//       } 
-//       else {
-//         if (result.paymentIntent.status === 'succeeded') {             
-//           setPaymentSuccess('💰 Payment Successful!');
-//           setError(null);          
-//           navigate('/success')
-//         }
-//       }
-//     } catch (err) {
-//       setError(err.response?.data?.error || 'Payment failed');
-//     } finally {
-//       setIsProcessing(false);
-//     }
-//   };
+      if (result.error) {
+        setError(result.error.message);
+        setPaymentSuccess(null);
+      } 
+      else {
+        if (result.paymentIntent.status === 'succeeded') {             
+          setPaymentSuccess('💰 Payment Successful!');
+          setError(null);          
+          navigate('/success')
+        }
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'Payment failed');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
-//   return (
+  return (
 //     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white border border-gray-200 rounded-xl shadow-lg space-y-6">
 //   <h2 className="text-3xl font-semibold text-center text-gray-800">Secure Payment</h2>
 
@@ -91,79 +91,8 @@
 
 //   <p className="text-xs text-gray-500 text-center">🔒 Your payment is encrypted and secure.</p>
 // </form>
-
-//   );
-// };
-
-// // ✅ Stripe Elements Wrapper
-// const StripePayment = () => {
-//   return (
-//     <Elements stripe={stripePromise}>
-//       <CheckoutForm />
-//     </Elements>
-//   );
-// };
-
-// export default StripePayment;
-
-
-import {
-  PaymentElement,
-  LinkAuthenticationElement
-} from '@stripe/react-stripe-js'
-import {useState} from 'react'
-import {useStripe, useElements} from '@stripe/react-stripe-js';
-
-export default function CheckoutForm() {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [message, setMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
-      return;
-    }
-
-    setIsLoading(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: `${window.location.origin}/completion`,
-      },
-    });
-
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message);
-    } else {
-      setMessage("An unexpected error occured.");
-    }
-
-    setIsLoading(false);
-  }
-
-  return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <LinkAuthenticationElement id="link-authentication-element"
-        // Access the email value like so:
-        // onChange={(event) => {
-        //  setEmail(event.value.email);
-        // }}
-        //
-        // Prefill the email field like so:
-        // options={{defaultValues: {email: 'foo@bar.com'}}}
-        />
+<form id="payment-form" onSubmit={handleSubmit}>
+      <LinkAuthenticationElement id="link-authentication-element"/>
       <PaymentElement id="payment-element" />
       <button disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">
@@ -173,5 +102,19 @@ export default function CheckoutForm() {
       {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}
     </form>
-  )
-}
+
+  );
+};
+
+// ✅ Stripe Elements Wrapper
+const StripePayment = () => {
+  return (
+    <Elements stripe={stripePromise}>
+      <CheckoutForm />
+    </Elements>
+  );
+};
+
+export default StripePayment;
+
+
