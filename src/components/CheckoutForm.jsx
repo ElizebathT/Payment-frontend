@@ -54,54 +54,43 @@ const CheckoutForm = () => {
   };
 
   return (
-//     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white border border-gray-200 rounded-xl shadow-lg space-y-6">
-//   <h2 className="text-3xl font-semibold text-center text-gray-800">Secure Payment</h2>
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white border border-gray-200 rounded-xl shadow-lg space-y-6">
+  <h2 className="text-3xl font-semibold text-center text-gray-800">Secure Payment</h2>
 
-//   <div className="space-y-2">
-//     <label className="text-sm font-medium text-gray-700">Card Details</label>
-//     <div className="p-3 border border-gray-300 rounded-lg focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
-//       <CardElement className="p-1 focus:outline-none" />
-//     </div>
-//   </div>
+  <div className="space-y-2">
+    <label className="text-sm font-medium text-gray-700">Card Details</label>
+    <div className="p-3 border border-gray-300 rounded-lg focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+      <CardElement className="p-1 focus:outline-none" />
+    </div>
+  </div>
 
-//   <button
-//     type="submit"
-//     disabled={!stripe || isProcessing}
-//     className={`w-full py-3 rounded-lg text-white font-semibold text-lg transition-all ${
-//       isProcessing
-//         ? 'bg-gray-400 cursor-not-allowed'
-//         : 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300'
-//     }`}
-//   >
-//     {isProcessing ? (
-//       <span className="flex justify-center items-center space-x-2">
-//         <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-//           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-//           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-//         </svg>
-//         <span>Processing...</span>
-//       </span>
-//     ) : (
-//       'Pay $50.00'
-//     )}
-//   </button>
+  <button
+    type="submit"
+    disabled={!stripe || isProcessing}
+    className={`w-full py-3 rounded-lg text-white font-semibold text-lg transition-all ${
+      isProcessing
+        ? 'bg-gray-400 cursor-not-allowed'
+        : 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300'
+    }`}
+  >
+    {isProcessing ? (
+      <span className="flex justify-center items-center space-x-2">
+        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>Processing...</span>
+      </span>
+    ) : (
+      'Pay $50.00'
+    )}
+  </button>
 
-//   {error && <p className="text-red-600 text-center">{error}</p>}
-//   {paymentSuccess && <p className="text-green-600 text-center">{paymentSuccess}</p>}
+  {error && <p className="text-red-600 text-center">{error}</p>}
+  {paymentSuccess && <p className="text-green-600 text-center">{paymentSuccess}</p>}
 
-//   <p className="text-xs text-gray-500 text-center">🔒 Your payment is encrypted and secure.</p>
+  <p className="text-xs text-gray-500 text-center">🔒 Your payment is encrypted and secure.</p>
 // </form>
-<form id="payment-form" onSubmit={handleSubmit}>
-      <LinkAuthenticationElement id="link-authentication-element"/>
-      <PaymentElement id="payment-element" />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-      </button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
-    </form>
 
   );
 };
