@@ -11,7 +11,6 @@ const Index = () => {
             <Routes>
                 <Route path="/" element={<StripePayment/>}/>
                 <Route path="/success" element={<Success/>}/>
-                <Route path="/test" element="Testing"/>
             </Routes>
         </BrowserRouter> 
         
