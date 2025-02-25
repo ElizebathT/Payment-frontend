@@ -26,9 +26,8 @@ const CheckoutForm = () => {
 
     try {
       // ✅ 1. Create Payment Intent from backend
-      const { data } = await axios.post(`${BASE_URL}/stripe/checkout`, {
-        amount: 5000, // Amount in cents (e.g., $50.00)
-        currency: 'usd',
+      const { data } = await axios.post('https://payment-backend-sq6x.onrender.com/stripe/checkout', {
+        amount: 5000
       });
 
       // ✅ 2. Confirm Card Payment
