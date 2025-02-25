@@ -54,20 +54,37 @@ const CheckoutForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 border rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Stripe Payment</h2>
-      <CardElement className="p-2 border rounded-md" />
-      <button
-        type="submit"
-        disabled={!stripe || isProcessing}
-        className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
-      >
-        {isProcessing ? 'Processing...' : 'Pay $50.00'}
-      </button>
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-8 border rounded-2xl shadow-2xl bg-gradient-to-br from-white to-gray-100 space-y-6">
+  <h2 className="text-3xl font-extrabold text-center text-blue-700">💳 Stripe Payment</h2>
+  
+  <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg shadow-inner transition-all hover:border-blue-500 focus-within:border-blue-500">
+    <CardElement className="p-2 focus:outline-none" />
+  </div>
 
-      {error && <p className="text-red-500 mt-3">{error}</p>}
-      {paymentSuccess && <p className="text-green-500 mt-3">{paymentSuccess}</p>}
-    </form>
+  <button
+    type="submit"
+    disabled={!stripe || isProcessing}
+    className={`mt-4 w-full py-3 rounded-lg text-white font-bold text-lg shadow-md transition-all duration-300 ${
+      isProcessing ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800'
+    }`}
+  >
+    {isProcessing ? (
+      <span className="flex justify-center items-center space-x-2">
+        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>Processing...</span>
+      </span>
+    ) : (
+      'Pay $50.00'
+    )}
+  </button>
+
+  {error && <p className="text-red-600 text-center font-medium">{error}</p>}
+  {paymentSuccess && <p className="text-green-600 text-center font-medium animate-pulse">{paymentSuccess}</p>}
+</form>
+
   );
 };
 
