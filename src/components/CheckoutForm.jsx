@@ -106,100 +106,72 @@
 
 // export default StripePayment;
 
-// App.js
-import React, { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements, PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 
-const stripePromise = loadStripe('pk_test_YOUR_PUBLISHABLE_KEY');
+import {
+  PaymentElement,
+  LinkAuthenticationElement
+} from '@stripe/react-stripe-js'
+import {useState} from 'react'
+import {useStripe, useElements} from '@stripe/react-stripe-js';
 
-const PaymentForm = () => {
+export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const [paymentSuccess, setPaymentSuccess] = useState('');
-  const [error, setError] = useState('');
-  const [paymentRequest, setPaymentRequest] = useState(null);
-
-  // Setup Apple Pay / Google Pay
-  React.useEffect(() => {
-    if (stripe) {
-      const pr = stripe.paymentRequest({
-        country: 'US',
-        currency: 'usd',
-        total: {
-          label: 'Total',
-          amount: 5000, // $50.00
-        },
-        requestPayerName: true,
-        requestPayerEmail: true,
-      });
-
-      pr.canMakePayment().then((result) => {
-        if (result) {
-          setPaymentRequest(pr);
-        }
-      });
-    }
-  }, [stripe]);
+  const [message, setMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { error: backendError, clientSecret } = await fetch('http://localhost:5000/create-payment-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: 50 }), // $50.00
-    }).then((res) => res.json());
-
-    if (backendError) {
-      setError(backendError);
+    if (!stripe || !elements) {
+      // Stripe.js has not yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
-    const payload = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
+    setIsLoading(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        // Make sure to change this to your payment completion page
+        return_url: `${window.location.origin}/completion`,
       },
     });
 
-    if (payload.error) {
-      setError(`Payment failed: ${payload.error.message}`);
+    // This point will only be reached if there is an immediate error when
+    // confirming the payment. Otherwise, your customer will be redirected to
+    // your `return_url`. For some payment methods like iDEAL, your customer will
+    // be redirected to an intermediate site first to authorize the payment, then
+    // redirected to the `return_url`.
+    if (error.type === "card_error" || error.type === "validation_error") {
+      setMessage(error.message);
     } else {
-      setPaymentSuccess('Payment successful 🎉');
+      setMessage("An unexpected error occured.");
     }
-  };
+
+    setIsLoading(false);
+  }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg space-y-5">
-      <h2 className="text-2xl font-bold text-center">Complete Your Payment</h2>
-
-      {/* Apple Pay / Google Pay Button */}
-      {  (
-        <PaymentRequestButtonElement options={{ paymentRequest }} className="w-full my-4" />
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <CardElement className="p-3 border rounded-md" />
-        <button
-          type="submit"
-          disabled={!stripe}
-          className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Pay $50.00
-        </button>
-      </form>
-
-      {error && <p className="text-red-500 text-center">{error}</p>}
-      {paymentSuccess && <p className="text-green-600 text-center">{paymentSuccess}</p>}
-    </div>
-  );
-};
-
-const App = () => (
-  <Elements stripe={stripePromise}>
-    <PaymentForm />
-  </Elements>
-);
-
-export default App;
-
+    <form id="payment-form" onSubmit={handleSubmit}>
+      <LinkAuthenticationElement id="link-authentication-element"
+        // Access the email value like so:
+        // onChange={(event) => {
+        //  setEmail(event.value.email);
+        // }}
+        //
+        // Prefill the email field like so:
+        // options={{defaultValues: {email: 'foo@bar.com'}}}
+        />
+      <PaymentElement id="payment-element" />
+      <button disabled={isLoading || !stripe || !elements} id="submit">
+        <span id="button-text">
+          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+        </span>
+      </button>
+      {/* Show any error or success messages */}
+      {message && <div id="payment-message">{message}</div>}
+    </form>
+  )
+}
