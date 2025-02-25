@@ -26,9 +26,7 @@ const CheckoutForm = () => {
 
     try {
       // ✅ 1. Create Payment Intent from backend
-      const { data } = await axios.post('https://payment-backend-sq6x.onrender.com/stripe/checkout', {
-        amount: 5000
-      },{ headers: { 'Content-Type': 'application/json' },withCredentials: true });
+      const { data } = await axios.post('https://payment-backend-sq6x.onrender.com/stripe/checkout', {}, { headers: { 'Content-Type': 'application/json' },withCredentials: true });
 
       // ✅ 2. Confirm Card Payment
       const result = await stripe.confirmCardPayment(data.clientSecret, {
