@@ -174,7 +174,7 @@ const PaymentForm = () => {
       <h2 className="text-2xl font-bold text-center">Complete Your Payment</h2>
 
       {/* Apple Pay / Google Pay Button */}
-      {paymentRequest && (
+      {  (
         <PaymentRequestButtonElement options={{ paymentRequest }} className="w-full my-4" />
       )}
 
